@@ -1,0 +1,166 @@
+<style>
+.sl-wrap { width: 100%; }
+.sl-wrap svg { width: 100%; height: auto; display: block; border-radius: 10px; }
+.sl-pills { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.sl-pill { padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; color: #fff; background: #888; }
+@keyframes slFlick { 0%,100% { opacity: 1 } 50% { opacity: .2 } }
+.sl-flick { animation: slFlick .6s infinite; }
+@keyframes slTwinkle { 0%,100% { opacity: .35 } 50% { opacity: 1 } }
+.sl-star { animation: slTwinkle 2.5s infinite; }
+</style>
+
+<div class="sl-wrap">
+  <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="slSky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" ng-attr-stop-color="{{v.skyTop}}"/>
+        <stop offset="1" ng-attr-stop-color="{{v.skyBot}}"/>
+      </linearGradient>
+      <linearGradient id="slCone" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ffe082" stop-opacity="0.75"/>
+        <stop offset="1" stop-color="#ffe082" stop-opacity="0.05"/>
+      </linearGradient>
+      <radialGradient id="slGlow">
+        <stop offset="0" stop-color="#fff3b0" stop-opacity="0.9"/>
+        <stop offset="1" stop-color="#fff3b0" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <!-- langit -->
+    <rect width="400" height="220" fill="url(#slSky)"/>
+
+    <!-- bintang -->
+    <g ng-attr-opacity="{{v.night}}" fill="#fff">
+      <circle class="sl-star" cx="40" cy="30" r="1.5"/>
+      <circle class="sl-star" cx="90" cy="55" r="1.2"/>
+      <circle class="sl-star" cx="150" cy="25" r="1.6"/>
+      <circle class="sl-star" cx="230" cy="40" r="1.2"/>
+      <circle class="sl-star" cx="300" cy="22" r="1.5"/>
+      <circle class="sl-star" cx="360" cy="60" r="1.3"/>
+    </g>
+
+    <!-- matahari -->
+    <g ng-attr-opacity="{{v.day}}">
+      <circle cx="340" cy="45" r="30" fill="#fff59d" opacity="0.35"/>
+      <circle cx="340" cy="45" r="18" fill="#ffd54f"/>
+    </g>
+    <!-- bulan -->
+    <g ng-attr-opacity="{{v.night}}">
+      <circle cx="60" cy="50" r="16" fill="#eceff1"/>
+      <circle cx="68" cy="45" r="14" ng-attr-fill="{{v.skyTop}}"/>
+    </g>
+
+    <!-- gedung -->
+    <g fill="#37474f">
+      <rect x="20" y="105" width="55" height="65"/>
+      <rect x="80" y="125" width="40" height="45"/>
+      <rect x="300" y="100" width="60" height="70"/>
+      <rect x="365" y="130" width="35" height="40"/>
+    </g>
+    <g fill="#ffe082" ng-attr-opacity="{{v.night * 0.85}}">
+      <rect x="30" y="118" width="9" height="9"/><rect x="50" y="118" width="9" height="9"/>
+      <rect x="30" y="138" width="9" height="9"/><rect x="50" y="148" width="9" height="9"/>
+      <rect x="90" y="138" width="9" height="9"/><rect x="104" y="150" width="9" height="9"/>
+      <rect x="312" y="114" width="9" height="9"/><rect x="332" y="114" width="9" height="9"/>
+      <rect x="312" y="136" width="9" height="9"/><rect x="340" y="146" width="9" height="9"/>
+    </g>
+
+    <!-- jalan -->
+    <rect y="170" width="400" height="50" fill="#2b2f36"/>
+    <rect y="170" width="400" height="6" fill="#555b66"/>
+    <g fill="#e0e0e0" opacity="0.7">
+      <rect x="20" y="198" width="40" height="4"/><rect x="100" y="198" width="40" height="4"/>
+      <rect x="180" y="198" width="40" height="4"/><rect x="260" y="198" width="40" height="4"/>
+      <rect x="340" y="198" width="40" height="4"/>
+    </g>
+
+    <!-- cahaya lampu -->
+    <polygon points="252,70 195,172 315,172" fill="url(#slCone)" ng-attr-opacity="{{v.lit}}"/>
+    <ellipse cx="255" cy="173" rx="60" ry="6" fill="#ffe082" ng-attr-opacity="{{v.lit * 0.5}}"/>
+    <circle cx="252" cy="66" r="38" fill="url(#slGlow)" ng-attr-opacity="{{v.lit}}"/>
+
+    <!-- tiang -->
+    <rect x="196" y="72" width="8" height="100" fill="#4a4f57"/>
+    <rect x="190" y="166" width="20" height="6" fill="#3a3e45"/>
+    <path d="M200 74 Q200 58 225 58 L248 58" stroke="#4a4f57" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <path d="M240 58 L264 58 L260 68 L244 68 Z" fill="#3a3e45"/>
+    <ellipse cx="252" cy="68" rx="8" ry="3.5" ng-attr-fill="{{v.lampColor}}" ng-class="{'sl-flick': v.fault}"/>
+
+    <!-- tanda rusak -->
+    <g ng-show="v.fault" class="sl-flick">
+      <polygon points="252,12 270,42 234,42" fill="#e53935"/>
+      <text x="252" y="38" font-size="20" font-weight="bold" fill="#fff" text-anchor="middle">!</text>
+    </g>
+
+    <!-- lux -->
+    <text x="10" y="16" font-size="11" fill="#fff" opacity="0.85">{{v.lux}} lux</text>
+
+    <!-- overlay offline -->
+    <g ng-show="!v.online">
+      <rect width="400" height="220" fill="#37474f" opacity="0.85"/>
+      <text x="200" y="115" font-size="22" font-weight="bold" fill="#fff" text-anchor="middle">OFFLINE</text>
+      <text x="200" y="136" font-size="11" fill="#cfd8dc" text-anchor="middle">menunggu data ESP32...</text>
+    </g>
+  </svg>
+
+  <div class="sl-pills">
+    <span class="sl-pill" ng-style="{background: v.lamp === 'ON' ? '#f9a825' : '#757575'}">💡 {{v.lamp}}</span>
+    <span class="sl-pill" ng-style="{background: v.mode === 'AUTO' ? '#43a047' : '#1e88e5'}">⚙ {{v.mode}}</span>
+    <span class="sl-pill" ng-style="{background: v.fault ? '#e53935' : '#43a047'}">{{v.fault ? '⚠ ' : '✔ '}}{{v.status}}</span>
+  </div>
+</div>
+
+<script>
+(function (scope) {
+  var OFFLINE_MS = 15000;     // anggap offline jika tidak ada data selama 15 detik
+  var lastSeen = 0;
+
+  function hex(c) { return [1, 3, 5].map(function (i) { return parseInt(c.substr(i, 2), 16); }); }
+  function mix(a, b, t) {
+    var x = hex(a), y = hex(b);
+    return 'rgb(' + x.map(function (v, i) { return Math.round(v + (y[i] - v) * t); }).join(',') + ')';
+  }
+  function clamp(n) { return Math.max(0, Math.min(1, n)); }
+
+  scope.v = {
+    lux: '-', lamp: '-', mode: '-', status: '-',
+    online: false, fault: false,
+    day: 1, night: 0, lit: 0,
+    skyTop: '#4aa3df', skyBot: '#bfe6ff', lampColor: '#777'
+  };
+
+  function update(d) {
+    var lux = Number(d.lux) || 0;
+    var night = clamp(1 - lux / 600);       // ubah 600 jika ambang gelap kamu berbeda
+    var status = String(d.status || 'normal');
+    var fault = status.toLowerCase() !== 'normal';
+    var on = String(d.lamp).toUpperCase() === 'ON';
+
+    scope.v = {
+      lux: lux.toFixed(1),
+      lamp: d.lamp, mode: d.mode, status: status,
+      online: true, fault: fault,
+      night: night, day: 1 - night,
+      lit: (on && !fault) ? 1 : 0,
+      skyTop: mix('#4aa3df', '#0b1026', night),
+      skyBot: mix('#bfe6ff', '#1c2a55', night),
+      lampColor: fault ? '#e53935' : (on ? '#ffd54f' : '#777')
+    };
+    lastSeen = Date.now();
+  }
+
+  scope.$watch('msg', function (msg) {
+    if (!msg || msg.payload === undefined) return;
+    var d = msg.payload;
+    if (typeof d === 'string') { try { d = JSON.parse(d); } catch (e) { return; } }
+    if (d && d.lux !== undefined) update(d);
+  });
+
+  var timer = setInterval(function () {
+    if (scope.v.online && Date.now() - lastSeen > OFFLINE_MS) {
+      scope.$evalAsync(function () { scope.v.online = false; });
+    }
+  }, 2000);
+  scope.$on('$destroy', function () { clearInterval(timer); });
+})(scope);
+</script>
